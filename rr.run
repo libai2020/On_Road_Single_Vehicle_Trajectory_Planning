@@ -1,0 +1,41 @@
+reset;
+model NLP.mod;
+include initial_guess0.INIVAL;
+option solver ipopt;
+solve;
+
+shell ("del " & ("opti_flag.txt"));
+if match (solve_message, "Optimal") > 0 then {
+	printf "1">>("opti_flag.txt");
+} else{
+	printf "0">>("opti_flag.txt");
+}
+close ("opti_flag.txt");
+
+shell ("del " & ("x.txt"));
+shell ("del " & ("y.txt"));
+shell ("del " & ("theta.txt"));
+for {i in I} {
+	printf "%5.3f;", x[i]>>("x.txt");
+	printf "%5.3f;", y[i]>>("y.txt");
+	printf "%5.3f;", theta[i]>>("theta.txt");
+}
+close ("x.txt");
+close ("y.txt");
+close ("theta.txt");
+
+shell ("del " & ("initial_guess1.INIVAL"));
+for {i in I} {
+	printf "let x[%d]:= %5.3f; \n", i, x[i]>>("initial_guess1.INIVAL");
+	printf "let y[%d]:= %5.3f; \n", i, y[i]>>("initial_guess1.INIVAL");
+	printf "let theta[%d]:= %5.3f; \n", i, theta[i]>>("initial_guess1.INIVAL");
+	printf "let v[%d]:= %5.3f; \n", i, v[i]>>("initial_guess1.INIVAL");
+	printf "let a[%d]:= %5.3f; \n", i, a[i]>>("initial_guess1.INIVAL");
+	printf "let phy[%d]:= %5.3f; \n", i, phy[i]>>("initial_guess1.INIVAL");		
+	printf "let w[%d]:= %5.3f; \n", i, w[i]>>("initial_guess1.INIVAL");
+	printf "let xf[%d]:= %5.3f; \n", i, xf[i]>>("initial_guess1.INIVAL");
+	printf "let yf[%d]:= %5.3f; \n", i, yf[i]>>("initial_guess1.INIVAL");
+	printf "let xr[%d]:= %5.3f; \n", i, xr[i]>>("initial_guess1.INIVAL");
+	printf "let yr[%d]:= %5.3f; \n", i, yr[i]>>("initial_guess1.INIVAL");
+}
+close ("initial_guess1.INIVAL");
